@@ -8,18 +8,20 @@ module.exports = {
 
         diceRegex = /(\d+)?d(\d+)((?:\+|\-)\d+)?/i;
 
-        let msg;
+        let msg = '';
+
+        let totals = [];
 
         // chaining dice rolls
         for (var arg of args) {
             let die = arg.match(diceRegex);
 
             if (die == null) {
-                message.reply(`**${die[0]}** is not a valid dice roll`);
+                message.reply(`**${arg}** is not a valid dice roll`);
                 continue;
             }
 
-            msg = `**${die[0]}**\n`
+            msg += `\n**${die[0]}**\n`
 
             // number of dice
             // if not given, this will be 1
@@ -55,9 +57,20 @@ module.exports = {
             if (modifier != 0) {
                 msg += ` (${sumOfRolls} + ${modifier})`
             }
-            message.reply(msg)
+
+            totals.push(sumOfRolls + modifier)
+
         }
 
+        if (totals.length > 1) {
+            let totalSum = 0;
+            for (var total of totals) {
+                totalSum += total;
+            }
+            msg += `\nTotal of all rolls: **${totalSum}**`
+        }
+
+        message.reply(msg)
 
     },
 };
