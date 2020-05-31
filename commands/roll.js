@@ -6,22 +6,20 @@ module.exports = {
     usage: '<number of dice>d<sides of dice><+/- modifier>',
     execute(message, args) {
 
-        diceRegex = /(\d+)?d(\d+)((?:\+|\-)\d+)?/i;
-
         let msg = '';
 
         let totals = [];
 
         // chaining dice rolls
         for (var arg of args) {
-            let die = arg.match(diceRegex);
+            let die = arg.match(/(\d+)?d(\d+)((?:\+|\-)\d+)?/i);
 
             if (die == null) {
-                message.reply(`**${arg}** is not a valid dice roll`);
+                msg += `\n**${arg}** is not a valid dice roll`;
                 continue;
             }
 
-            msg += `\n**${die[0]}**\n`
+            msg += `\n**${die[0]}**`
 
             // number of dice
             // if not given, this will be 1
@@ -44,18 +42,25 @@ module.exports = {
 
             for (var i = 0; i < num_dice; i++) {
                 let dice_roll = Math.floor(Math.random() * dice_type) + 1;
-                msg += `> Die ${i + 1}: ${dice_roll}\n`;
+                msg += `\n> Die ${i + 1}: ${dice_roll}`;
                 rolls[i] = dice_roll;
             }
 
+            // add up the rolls
             let sumOfRolls = 0;
             for (var dice_roll of rolls) {
                 sumOfRolls += dice_roll
             };
 
-            msg += `> Total: **${sumOfRolls + modifier}**`
+            msg += `\n> Total: **${sumOfRolls + modifier}**`
             if (modifier != 0) {
-                msg += ` (${sumOfRolls} + ${modifier})`
+                let symb
+                if (modifier > 0) {
+                    symb = '+'
+                } else {
+                    symb = '-'
+                }
+                msg += ` (${sumOfRolls} ${symb} ${Math.abs(modifier)})`
             }
 
             totals.push(sumOfRolls + modifier)

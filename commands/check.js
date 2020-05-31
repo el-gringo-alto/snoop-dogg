@@ -25,7 +25,13 @@ module.exports = {
         msg = `**${roll + modifier}**`
 
         if (modifier != 0) {
-            msg += ` (${roll} + ${modifier})`
+            let symb
+            if (modifier > 0) {
+                symb = '+'
+            } else {
+                symb = '-'
+            }
+            msg += ` (${roll} ${symb} ${Math.abs(modifier)})`
         }
 
         message.reply(msg);
