@@ -1,3 +1,5 @@
+const tools = require('../tools');
+
 module.exports = {
     name: 'roll',
     description: 'Roll a die.',
@@ -23,13 +25,13 @@ module.exports = {
 
             // number of dice
             // if not given, this will be 1
-            let num_dice = 1;
+            let numDice = 1;
             if (die[1] != null) {
-                num_dice = die[1]
+                numDice = die[1]
             };
 
             // type of dice
-            let dice_type = die[2];
+            let diceType = die[2];
 
             // modifier
             // if not given, this will be 0
@@ -40,28 +42,19 @@ module.exports = {
 
             let rolls = [];
 
-            for (var i = 0; i < num_dice; i++) {
-                let dice_roll = Math.floor(Math.random() * dice_type) + 1;
-                msg += `\n> Die ${i + 1}: ${dice_roll}`;
-                rolls[i] = dice_roll;
+            for (var i = 0; i < numDice; i++) {
+                let diceRoll = tools.roll(diceType);
+                msg += `\n> Die ${i + 1}: ${diceRoll}`;
+                rolls[i] = diceRoll;
             }
 
             // add up the rolls
             let sumOfRolls = 0;
-            for (var dice_roll of rolls) {
-                sumOfRolls += dice_roll
+            for (var diceRoll of rolls) {
+                sumOfRolls += diceRoll
             };
 
-            msg += `\n> Total: **${sumOfRolls + modifier}**`
-            if (modifier != 0) {
-                let symb
-                if (modifier > 0) {
-                    symb = '+'
-                } else {
-                    symb = '-'
-                }
-                msg += ` (${sumOfRolls} ${symb} ${Math.abs(modifier)})`
-            }
+            msg += `\n> Total: ${tools.totalMessage(sumOfRolls, modifier)}`
 
             totals.push(sumOfRolls + modifier)
 

@@ -1,8 +1,10 @@
+const tools = require('../tools');
+
 module.exports = {
     name: 'check',
     aliases: ['c'],
     description: 'Roll a d20. You can add a modifier after the command call to add it to the result.',
-    usage: '<modifier>',
+    usage: '<optional modifier>',
     execute(message, args) {
         let modifier;
 
@@ -19,21 +21,6 @@ module.exports = {
             return;
         }
 
-        // dice roll
-        let roll = Math.floor(Math.random() * 20) + 1;
-
-        msg = `**${roll + modifier}**`
-
-        if (modifier != 0) {
-            let symb
-            if (modifier > 0) {
-                symb = '+'
-            } else {
-                symb = '-'
-            }
-            msg += ` (${roll} ${symb} ${Math.abs(modifier)})`
-        }
-
-        message.reply(msg);
+        message.reply(tools.totalMessage(tools.roll(20), modifier));
     },
 };
